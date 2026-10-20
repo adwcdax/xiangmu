@@ -5,6 +5,7 @@ data/raw/*.csv binary
 
 # 训练语料与配置类文本：仓库与工作区统一 LF
 data/data_process/** text eol=lf
+data/zh_data_process/** text eol=lf
 *.py text eol=lf
 *.json text eol=lf
 *.md text eol=lf

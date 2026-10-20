@@ -1,0 +1,50 @@
+{
+  "generated_utc": "2026-10-20T17:34:10Z",
+  "method": "exact-dup union + MinHash(128 perm) LSH(bands=16,rows=8) + 精确 Jaccard 复核(>=0.75) + 并查集归组 + 组级分层切分",
+  "params": {
+    "seed": 20261020,
+    "num_perm": 128,
+    "bands": 16,
+    "rows": 8,
+    "jaccard_threshold": 0.75,
+    "shingle": "word 3-gram"
+  },
+  "grouping": {
+    "rows": 17880,
+    "unique_exact_texts": 14600,
+    "exact_duplicate_rows": 3280,
+    "lsh_candidate_pairs": 137311,
+    "near_dup_merges": 2066,
+    "groups": 12534,
+    "largest_group": 417,
+    "singleton_groups": 10757
+  },
+  "label_conflict_dropped_groups": 5,
+  "label_conflict_dropped_rows": 34,
+  "rows_in_split": 17846,
+  "rows_dropped_total": 34,
+  "post_check": {
+    "groups_crossing_splits": 0,
+    "exact_texts_crossing_splits": 0,
+    "fraud_quota_floor": 40,
+    "fraud_per_split": {
+      "dev": 86,
+      "test": 86
+    },
+    "quota_ok": true
+  },
+  "splits": {
+    "train": {
+      "rows": 14276,
+      "fraudulent": 687
+    },
+    "dev": {
+      "rows": 1785,
+      "fraudulent": 86
+    },
+    "test": {
+      "rows": 1785,
+      "fraudulent": 86
+    }
+  }
+}

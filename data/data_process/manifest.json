@@ -1,12 +1,11 @@
 {
-  "created_utc": "2026-10-20T11:25:33Z",
+  "created_utc": "2026-10-20T17:34:10Z",
   "source": "data/raw/fake_job_postings.csv",
   "source_sha256": "59253295129d8b6a27607f9904f7d4ddf4dbb0ee35e079c7eb51b58b5e62bf60",
   "field_used": "description",
   "cleaning": [
     "html.unescape",
-    "nbsp->space",
-    "whitespace_collapse",
+    "whitespace_collapse(含全部断行符)",
     "one_line_per_record"
   ],
   "read_note": "下游 pandas.read_csv 必须用 sep='\\t', quoting=csv.QUOTE_NONE(文案含双引号, 默认引号解析会吞行)",
@@ -18,19 +17,21 @@
     "test": 0.1
   },
   "stratify_by": "fraudulent",
+  "split_rule": "组级切分(minhash 近重复归组), 同组与完全重复正文均不跨切分; 标签冲突组剔除",
   "total_rows": 17880,
   "empty_text_rows": 2,
+  "leakage_report": "leakage_report.json",
   "splits": {
     "train": {
-      "rows": 14304,
-      "fraudulent": 693
+      "rows": 14276,
+      "fraudulent": 687
     },
     "dev": {
-      "rows": 1788,
-      "fraudulent": 87
+      "rows": 1785,
+      "fraudulent": 86
     },
     "test": {
-      "rows": 1788,
+      "rows": 1785,
       "fraudulent": 86
     }
   }

@@ -1,0 +1,10 @@
+# 行尾策略：锁定跨平台一致性（本仓库 core.autocrlf=true，不锁会被 Git 改写行尾）
+
+# 原始数据必须逐字节不变：sha256 指纹校验依赖这一点
+data/raw/*.csv binary
+
+# 训练语料与配置类文本：仓库与工作区统一 LF
+data/data_process/** text eol=lf
+*.py text eol=lf
+*.json text eol=lf
+*.md text eol=lf

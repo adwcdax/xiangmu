@@ -1,6 +1,6 @@
 {
-  "created_utc": "2026-10-20T10:40:15Z",
-  "source": "E:\\heima_python\\NLP\\project_gitstore\\xiangmu\\data\\raw\\fake_job_postings.csv",
+  "created_utc": "2026-10-20T11:25:33Z",
+  "source": "data/raw/fake_job_postings.csv",
   "source_sha256": "59253295129d8b6a27607f9904f7d4ddf4dbb0ee35e079c7eb51b58b5e62bf60",
   "field_used": "description",
   "cleaning": [

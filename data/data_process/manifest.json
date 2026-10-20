@@ -1,0 +1,37 @@
+{
+  "created_utc": "2026-10-20T10:40:15Z",
+  "source": "E:\\heima_python\\NLP\\project_gitstore\\xiangmu\\data\\raw\\fake_job_postings.csv",
+  "source_sha256": "59253295129d8b6a27607f9904f7d4ddf4dbb0ee35e079c7eb51b58b5e62bf60",
+  "field_used": "description",
+  "cleaning": [
+    "html.unescape",
+    "nbsp->space",
+    "whitespace_collapse",
+    "one_line_per_record"
+  ],
+  "read_note": "下游 pandas.read_csv 必须用 sep='\\t', quoting=csv.QUOTE_NONE(文案含双引号, 默认引号解析会吞行)",
+  "url_mask_note": "该 Zenodo 版发行方已还原真实 URL, 无 #URL_hash#/[masked] 掩码; '#default#' 仅 1 行, 原样保留",
+  "seed": 20261020,
+  "ratios": {
+    "train": 0.8,
+    "dev": 0.1,
+    "test": 0.1
+  },
+  "stratify_by": "fraudulent",
+  "total_rows": 17880,
+  "empty_text_rows": 2,
+  "splits": {
+    "train": {
+      "rows": 14304,
+      "fraudulent": 693
+    },
+    "dev": {
+      "rows": 1788,
+      "fraudulent": 87
+    },
+    "test": {
+      "rows": 1788,
+      "fraudulent": 86
+    }
+  }
+}

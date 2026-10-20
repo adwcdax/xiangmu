@@ -2,6 +2,7 @@
 
 # 原始数据必须逐字节不变：sha256 指纹校验依赖这一点
 data/raw/*.csv binary
+data/raw_zh/*.csv binary
 
 # 训练语料与配置类文本：仓库与工作区统一 LF
 data/data_process/** text eol=lf

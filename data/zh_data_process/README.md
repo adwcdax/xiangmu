@@ -5,17 +5,27 @@
 
 标签：`0=无风险`、`1=欺诈`（见 `class.txt`，行号即标签值）。
 
-## 数据来源
+## 数据来源与复现链
 
-| 项 | 值 |
-|---|---|
-| 源文件 | `中文电诈语料_统一表.csv`（352,836 行 × 13 列，189 MB） |
-| sha256 | `710da89236fb3134d37d0b47809545a2ed21600ab49de33390bcee4c397ffae2` |
-| 上游 | CCL23-Eval 任务6 衍生集 `Abooooo/FGRC-SCD`；**文本为 LLM 合成，非真实查获语料** |
-| 入库情况 | **未入库**：189 MB 超 GitHub 单文件 100 MB 硬限，复现需自备同指纹文件 |
+分两层，与英文侧 `../data_process` 同构：
 
-`中文电诈对话_JSONL.txt` **未使用**：实测其 159,843 条 `sample_id` 与统一表的 dialog 子集完全相等、
-文本逐字相同（抽样 3,000 条 100% 一致），它是同一批数据的另一种序列化，再用一次只会制造重复。
+```
+189MB 全表(未入库) --export_raw_zh.py--> data/raw_zh/recruit_fraud_wide.csv --data_process_zh.py--> train/dev/test.txt
+                                         (仓库内 raw 层, 52,058 行 × 13 列, 正文未清洗)
+```
+
+| 层 | 文件 | 大小 | sha256 |
+|---|---|---|---|
+| 上游全表 | `中文电诈语料_统一表.csv`（**未入库**，超 GitHub 100 MB 硬限） | 189 MB | `710da892…7ffae2` |
+| 仓库内 raw | `../raw_zh/recruit_fraud_wide.csv` | 30,614,450 B | `206528a0…3b0c2e1` |
+
+全表上游：CCL23-Eval 任务6 衍生集 `Abooooo/FGRC-SCD`，**文本为 LLM 合成，非真实查获语料**。
+
+- 上游 352,836 行 × 13 列；`../raw_zh/manifest_raw.json` 记全表指纹、关键词表与口径敏感性。
+- **clone 后即可复跑 step 2**（只需仓库内宽表）；只有重做筛选（step 1）才需自备同指纹的 189 MB 全表。
+- `中文电诈对话_JSONL.txt` **未使用**：实测其 159,843 条 `sample_id` 与全表的 dialog 子集完全相等、
+  文本逐字相同（抽样 3,000 条 100% 一致），它是同一批数据的另一种序列化，再用一次只会制造重复。
+- 改造为两层后重跑 step 2，`train/dev/test/index.tsv` 四个产物的 sha256 与单层版本**逐字节一致**。
 
 ## 筛选口径（C1 ∪ C3）
 
@@ -55,7 +65,8 @@
 
 | 文件 | 说明 |
 |---|---|
-| `data_process_zh.py` | 主脚本：筛选 → 清洗 → 按上游 split 落盘 |
+| `export_raw_zh.py` | Step 1：189 MB 全表 → 仓库内招聘域宽表（需自备源表才跑得动） |
+| `data_process_zh.py` | Step 2：宽表 → 清洗 → 按上游 split 落盘 |
 | `train.txt` / `dev.txt` / `test.txt` | 每行 `文本\t标签`（LF 行尾，一条记录一个物理行） |
 | `class.txt` | `无风险` / `欺诈` |
 | `stopwords.txt` | 中文停用词（复用蓝本 `tmf/01-data/stopwords.txt`） |
@@ -90,7 +101,9 @@ data = pd.read_csv("train.txt", sep="\t", names=["text", "label"],
 ## 复跑
 
 ```bash
-python -X utf8 data_process_zh.py   # 需自备源 CSV（指纹见上）
+python -X utf8 data_process_zh.py   # Step 2, 只用仓库内宽表, clone 后即可跑
 python -X utf8 dataEDA.py
 python -X utf8 verify_output.py     # 期望 OVERALL: PASS
+
+python -X utf8 export_raw_zh.py     # Step 1, 仅重做筛选时需要: 要自备 189MB 全表
 ```

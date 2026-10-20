@@ -51,3 +51,13 @@ python -X utf8 data_process.py    # 生成三切分 + class/stopwords/manifest
 python -X utf8 dataEDA.py         # 探索性分析
 python -X utf8 verify_output.py   # 机械校验（期望 OVERALL: PASS）
 ```
+
+## 行尾约定（跨平台必读）
+
+本仓库 `core.autocrlf` 可能为 `true`，会把文本文件行尾在 LF/CRLF 之间改写。仓库根 `.gitattributes`
+已锁定策略：`data/raw/*.csv` 标 `binary`（保证 sha256 指纹跨平台逐字节稳定），本目录文本标 `eol=lf`。
+
+- 新 clone 后 `verify_output.py` 应直接 PASS。
+- 若你在 `.gitattributes` 合入**之前**就已 clone 过：工作区的 txt 仍是 CRLF，会报 `crlf=... FAIL`。
+  执行 `git pull` 后重跑一次 `python -X utf8 data_process.py` 即可（或删掉三个 txt 再 `git checkout -- .`）。
+- 不要单独关掉 `core.autocrlf` 绕过，策略以 `.gitattributes` 为准。

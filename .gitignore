@@ -1,2 +1,16 @@
+# Python
 __pycache__/
-*.pyc
+*.py[cod]
+.venv/
+venv/
+
+# 训练产物：模型与中间数据体积大，不入库
+models/
+api/model/*.bin
+
+# 本地工具与工作区
+.workbuddy/
+*.genie
+.idea/workspace.xml
+.DS_Store
+Thumbs.db

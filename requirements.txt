@@ -1,0 +1,5 @@
+# 训练依赖（Windows + Python 3.12 已验证）
+# fasttext-wheel 提供 Windows 预编译轮子，免 MSVC 编译
+# numpy 必须 <2：fasttext-wheel 0.9.2 的 predict 标量分支在 numpy 2 下会抛 np.array(copy=False) 错误
+fasttext-wheel==0.9.2
+numpy<2

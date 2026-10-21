@@ -27,7 +27,7 @@
 |---|---|---|---|---|
 | fastText | 字级 n-gram + 线性 softmax | `fasttext/` | 0.8654 / 0.7365 | 40,000 条/s |
 | 随机森林 | jieba + TF-IDF + XGBoost | `randomforest/` | 0.8483 / 0.7076 | 批量推理 |
-| **BERT** | chinese-roberta-wwm-ext 微调 | `bert/` | **0.8730 / 0.7572** | 22 / 490 条/s |
+| **BERT** | chinese-roberta-wwm-ext 微调 | `bert/` | **0.8747 / 0.7621** | 22 / 490 条/s |
 
 三者共用 `data/zh_data_process/` 与同一套 10 类标签、同一套 API 契约，可直接对比选型。
 
@@ -39,7 +39,7 @@
   [评估](bert/docs/评估文档-BERT.md) ·
   [API](bert/docs/API文档-BERT.md)
 
-BERT 在全量 test 上比 fastText 高 0.0207 macro-F1，逐类全部持平或上涨，
+BERT 在全量 test 上比 fastText 高 0.0256 macro-F1，逐类全部上涨，
 但推理慢两个数量级（GPU 490 条/s vs CPU 40,000 条/s）。
 **离线批处理 / 预标注选 BERT，高 QPS 在线接口选 fastText。**
 
@@ -155,5 +155,5 @@ curl -X POST "http://127.0.0.1:8000/predict" -H "Content-Type: application/json"
 2. 短文本（<30 字）判定不可靠，接口会返回 `warnings`。
 3. 标签体系无「刷单返利类」，刷单话术归入投资理财（占该类 83.9%）。
 4. 概率高度饱和，不宜直接作风险分级。
-5. 电商客服 / 信用服务 / 购物服务三类互混严重（BERT 上占 27.9%），属话术重叠，
+5. 电商客服 / 信用服务 / 购物服务三类互混严重（BERT 上占 27.0%），属话术重叠，
    建议业务侧合并为「客服类诈骗」再细分。

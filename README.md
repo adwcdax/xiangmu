@@ -1,6 +1,7 @@
-# 中文电诈识别（fastText）
+# 中文电诈识别（fastText + 随机森林）
 
-对中文电诈文本做 **10 类分类**（无风险 + 9 类诈骗手法），并把模型封装成在线 HTTP 接口。
+对中文电诈文本做 **10 类分类**（无风险 + 9 类诈骗手法），提供两条可对比的模型链路，
+并把模型封装成在线 HTTP 接口。
 
 ## 结果速览
 
@@ -20,6 +21,18 @@
 > 强类可用于分流与预标注；弱类（婚恋、电商客服、军警）只能出候选。
 > 域外（如招聘岗位帖）无区分能力，见评估文档第 5 节。
 
+## 两条模型链路
+
+| 链路 | 特征 / 模型 | 入口 | 测试集 acc / macro-F1 |
+|---|---|---|---|
+| fastText | 字级 n-gram + 线性 softmax | `fasttext/` | **0.8654 / 0.7365** |
+| 随机森林 | jieba + TF-IDF + XGBoost | `randomforest/` | 0.8483 / 0.7076 |
+
+两者共用 `data/zh_data_process/` 与同一套 10 类标签，可直接对比选型。
+随机森林文档：[技术](randomforest/docs/技术文档-随机森林.md) ·
+[评估](randomforest/docs/评估文档-随机森林.md) ·
+[API](randomforest/docs/API文档-随机森林.md)
+
 ## 目录结构
 
 ```
@@ -34,6 +47,10 @@ fasttext/
   docs/                         技术文档、评估文档、API 文档
   models_zh/                    训练产物（不入库）
   requirements.txt              训练依赖
+randomforest/                   随机森林链路（TF-IDF + XGBoost）
+  config.py / data_processing.py / train.py / evaluate.py / predict.py / api.py
+  docs/                         技术 / 评估 / API 文档
+  processing/  models/          中间产物与模型（不入库）
 ```
 
 ## 快速开始

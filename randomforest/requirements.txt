@@ -1,0 +1,8 @@
+xgboost>=2.0
+scikit-learn>=1.3
+pandas>=2.0
+numpy<2
+jieba==0.42.1
+matplotlib>=3.7
+fastapi
+uvicorn

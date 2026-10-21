@@ -24,3 +24,6 @@ fasttext/src/
 fasttext/api/
 fasttext/docs/技术说明.md
 fasttext/docs/API.md
+# 随机森林链路产物
+randomforest/models/
+randomforest/processing/

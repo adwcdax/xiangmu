@@ -51,7 +51,28 @@ randomforest/                   随机森林链路（TF-IDF + XGBoost）
   config.py / data_processing.py / train.py / evaluate.py / predict.py / api.py
   docs/                         技术 / 评估 / API 文档
   processing/  models/          中间产物与模型（不入库）
+web/                            演示页（Vite + TypeScript，含在线检测台与 10 个场景）
+  src/api/                      v1 / legacy / mock 三种客户端
+  src/scenes/                   S0–S9
+  public/data/                  场景数据（缺失产物用固定种子 mock 并标记）
 ```
+
+## 演示页
+
+演示页在 `web/`，自动探测 API：优先 `/api/v1/*`，其次现有 `/health`、`/labels`、`/predict`，
+都不可用时进入离线 mock。启动 API 后，首屏检测台直接使用真实模型输出。
+
+```bash
+# 终端 1：API（需先把训练好的模型放到 api_zh/model/）
+PORT=8000 python fasttext/api_zh/app.py
+
+# 终端 2：演示页
+cd web
+npm install
+npm run dev        # http://127.0.0.1:5173
+```
+
+详见 [web/README.md](web/README.md)。
 
 ## 快速开始
 

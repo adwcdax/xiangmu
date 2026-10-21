@@ -1,0 +1,22 @@
+{
+  "split": "test",
+  "n": 53281,
+  "before": {
+    "ece": 0.0102,
+    "brier": 0.0154,
+    "pr_auc": 0.9988
+  },
+  "after_isotonic": {
+    "ece": 0.0029,
+    "brier": 0.0145,
+    "pr_auc": 0.9988
+  },
+  "reliability": null,
+  "score_hist": null,
+  "high_band": {
+    "threshold": 0.9,
+    "share": 0.586,
+    "fraud_rate": 0.993
+  },
+  "mock": true
+}

@@ -1,0 +1,139 @@
+{
+  "total": 352836,
+  "classes": [
+    {
+      "id": 0,
+      "name": "无风险",
+      "short": "无风险",
+      "total": 138795,
+      "is_fraud": false
+    },
+    {
+      "id": 1,
+      "name": "虚假网络投资理财类",
+      "short": "投资理财",
+      "total": 85581,
+      "is_fraud": true
+    },
+    {
+      "id": 2,
+      "name": "虚假信用服务类",
+      "short": "信用服务",
+      "total": 35395,
+      "is_fraud": true
+    },
+    {
+      "id": 3,
+      "name": "虚假购物、服务类",
+      "short": "购物服务",
+      "total": 35394,
+      "is_fraud": true
+    },
+    {
+      "id": 4,
+      "name": "冒充电商物流客服类",
+      "short": "电商客服",
+      "total": 29952,
+      "is_fraud": true
+    },
+    {
+      "id": 5,
+      "name": "冒充领导、熟人类",
+      "short": "领导熟人",
+      "total": 11130,
+      "is_fraud": true
+    },
+    {
+      "id": 6,
+      "name": "冒充公检法及政府机关类",
+      "short": "公检法",
+      "total": 9178,
+      "is_fraud": true
+    },
+    {
+      "id": 7,
+      "name": "网络婚恋、交友类",
+      "short": "婚恋交友",
+      "total": 3123,
+      "is_fraud": true
+    },
+    {
+      "id": 8,
+      "name": "网黑案件",
+      "short": "网黑",
+      "total": 2206,
+      "is_fraud": true
+    },
+    {
+      "id": 9,
+      "name": "冒充军警购物类诈骗",
+      "short": "军警购物",
+      "total": 2082,
+      "is_fraud": true
+    }
+  ],
+  "modality": {
+    "sms": 192993,
+    "dialog": 159843
+  },
+  "modality_by_class": null,
+  "splits": {
+    "rule": "沿用源表官方 split：按 source 五维分层，group（案件）不跨集",
+    "train": {
+      "rows": 246403,
+      "class_counts": [
+        96737,
+        59819,
+        24741,
+        24799,
+        20894,
+        7780,
+        6425,
+        2189,
+        1539,
+        1480
+      ]
+    },
+    "dev": {
+      "rows": 53152,
+      "class_counts": [
+        20950,
+        12938,
+        5270,
+        5225,
+        4585,
+        1697,
+        1389,
+        477,
+        324,
+        297
+      ]
+    },
+    "test": {
+      "rows": 53281,
+      "class_counts": [
+        21108,
+        12824,
+        5384,
+        5370,
+        4473,
+        1653,
+        1364,
+        457,
+        343,
+        305
+      ]
+    }
+  },
+  "integrity": {
+    "duplicate_rate": 0,
+    "cross_split_groups": 0,
+    "source_sha256": "710da89236fb3134"
+  },
+  "length": {
+    "median": 121,
+    "p90": null,
+    "by_modality": null
+  },
+  "mock": true
+}

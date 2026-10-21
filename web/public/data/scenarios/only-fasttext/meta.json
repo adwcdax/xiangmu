@@ -1,0 +1,10 @@
+{
+  "data_mode": "mock",
+  "frozen_at": null,
+  "git_commit": "51da509",
+  "model_file": "fasttext_zh_fraud.bin",
+  "seed": 20261021,
+  "hardware": "占位：CPU / 32 线程 / 内存待实测",
+  "corpus_note": "语料为合成/半合成电诈样本，结论仅适用于该语料域。",
+  "mock": true
+}

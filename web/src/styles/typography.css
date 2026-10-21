@@ -1,0 +1,678 @@
+/* ==========================================================================
+   投影字号层
+   计划要求：正文 clamp(16px, 1.3vw, 20px)，投影场景最小 16px。
+   图表刻度、来源标签等微信息不得小于 10px；正文与结论优先保证可读性。
+   ========================================================================== */
+
+body {
+  font-size: clamp(16px, 1.05vw, 18px);
+}
+
+/* ---------- 顶栏与导航 ---------- */
+.brand-name {
+  font-size: 16px;
+}
+
+.brand-sub {
+  font-size: 11px;
+}
+
+.nav-dot {
+  font-size: 13px;
+  padding: 6px 8px;
+}
+
+.nav-dot-index {
+  font-size: 10.5px;
+}
+
+.tool-btn {
+  font-size: 12.5px;
+  padding: 6px 10px;
+}
+
+.eyebrow {
+  font-size: 12px;
+}
+
+.panel-head {
+  font-size: 13px;
+}
+
+.panel-sub {
+  font-size: 10.5px;
+}
+
+.source-tag {
+  font-size: 10.5px;
+}
+
+/* ---------- 徽章与预测标签 ---------- */
+.badge {
+  font-size: 10.5px;
+  padding: 3px 7px;
+}
+
+.badge--sm {
+  font-size: 10px;
+  padding: 2px 6px;
+}
+
+.badge-dot {
+  width: 5px;
+  height: 5px;
+}
+
+/* ---------- 广告卡 ---------- */
+.adcard-title {
+  font-size: 18px;
+}
+
+.adcard--mini .adcard-title {
+  font-size: 13.5px;
+}
+
+.adcard-id {
+  font-size: 10px;
+}
+
+.adcard-text,
+.adcard--large .adcard-text {
+  font-family: var(--font-mono);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.adcard--mini .adcard-text {
+  font-size: 11.5px;
+  line-height: 1.55;
+}
+
+.adcard-pred {
+  font-size: 10.5px;
+  padding: 4px 8px;
+}
+
+.adcard-foot {
+  margin-top: 12px;
+  padding-top: 10px;
+}
+
+/* S3 的四张卡需要展示完整可疑片段，允许正文自然排满卡片 */
+.s3-cards .adcard-text {
+  -webkit-line-clamp: 12;
+}
+
+/* 低高度视口放不下 12 行时，用渐隐提示正文还有后续，避免硬裁切。 */
+@media (max-height: 900px) {
+  .s3-cards .adcard-body {
+    -webkit-mask-image: linear-gradient(to bottom, rgb(0 0 0) calc(100% - 22px), transparent);
+    mask-image: linear-gradient(to bottom, rgb(0 0 0) calc(100% - 22px), transparent);
+  }
+}
+
+/* ---------- S0 ---------- */
+.s0-kicker {
+  font-size: 12px;
+}
+
+.s0-q-text {
+  font-size: 15px;
+}
+
+.s0-q-num {
+  font-size: 10px;
+}
+
+.s0-hint {
+  font-size: 11px;
+}
+
+/* ---------- S1 ---------- */
+.s1-copy h3 {
+  font-size: 18px;
+}
+
+.s1-copy p {
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+.s1-copy-host {
+  min-height: 168px;
+}
+
+.s1-side-stats b {
+  font-size: 18px;
+}
+
+.s1-side-stats span {
+  font-size: 11px;
+}
+
+.s1-side-note {
+  font-size: 12px;
+}
+
+.s1-legend {
+  font-size: 11.5px;
+}
+
+.s1-stat-label {
+  font-size: 11px;
+}
+
+.s1-lock-text b {
+  font-size: 11px;
+}
+
+.s1-lock-text span {
+  font-size: 10px;
+}
+
+/* ---------- S2 ---------- */
+.s2-sub {
+  font-size: 14px;
+}
+
+.s2-station b {
+  font-size: 12px;
+}
+
+.s2-station span {
+  font-size: 10px;
+}
+
+.s2-model-name {
+  font-size: 12px;
+}
+
+.s2-model-role {
+  font-size: 11px;
+}
+
+.s2-model-status {
+  font-size: 10.5px;
+}
+
+.s2-eval-chip {
+  font-size: 11px;
+  padding: 5px 11px;
+}
+
+.s2-eval-arrow {
+  font-size: 11px;
+}
+
+.s2-foot {
+  font-size: 10.5px;
+}
+
+/* ---------- S3 ---------- */
+.s3-head h2 {
+  font-size: clamp(28px, 2.3vw, 38px);
+}
+
+.switch-text {
+  font-size: 12px;
+}
+
+.switch-state {
+  font-size: 10px;
+}
+
+.s3-inline-note {
+  font-size: 11px;
+}
+
+.verdict-label {
+  font-size: 10px;
+}
+
+.verdict-main {
+  font-size: 15px;
+}
+
+.verdict-sub {
+  font-size: 11px;
+}
+
+.s3-rule-fold {
+  font-size: 11px;
+}
+
+.s3-footnote {
+  font-size: 10.5px;
+}
+
+.s3-funnel-note {
+  font-size: 10px;
+}
+
+.funnel-row {
+  font-size: 10px;
+  grid-template-columns: 120px 1fr 38px;
+}
+
+/* ---------- S4 ---------- */
+.s4-sub {
+  font-size: 15px;
+}
+
+.s4-level > span {
+  font-size: 11px;
+}
+
+.s4-level-name {
+  font-size: 20px;
+}
+
+.s4-level-removed {
+  font-size: 11px;
+}
+
+.s4-col-head {
+  font-size: 13px;
+}
+
+.s4-col-head b {
+  font-size: 10.5px;
+}
+
+.s4-score-top {
+  font-size: 13px;
+}
+
+.s4-score-value {
+  font-size: 24px;
+}
+
+.s4-score-foot {
+  font-size: 11px;
+}
+
+.s4-score-gap-label {
+  font-size: 11px;
+}
+
+.s4-slider-wrap > label {
+  font-size: 12px;
+}
+
+.s4-slider-labels {
+  font-size: 10px;
+  width: 170px;
+}
+
+.s4-slider-wrap input[type='range'] {
+  max-width: 320px;
+}
+
+.s4-control-note {
+  font-size: 11px;
+  max-width: 420px;
+}
+
+.s4-caption {
+  font-size: 11px;
+}
+
+.s4-degraded-msg {
+  font-size: 12px;
+}
+
+/* ---------- S5 ---------- */
+.s5-sub {
+  font-size: 13px;
+  max-width: 640px;
+}
+
+.s5-frontier-note {
+  font-size: 11.5px;
+}
+
+.s5-footnote {
+  font-size: 11px;
+}
+
+.s5-race-head h3 {
+  font-size: clamp(24px, 2vw, 32px);
+}
+
+.s5-race-caption {
+  font-size: 13px;
+  max-width: 560px;
+}
+
+.race-progress-lane {
+  grid-template-columns: 150px 1fr 44px;
+}
+
+.race-progress-name {
+  font-size: 12px;
+}
+
+.race-progress-track {
+  height: 6px;
+}
+
+.race-progress-pct {
+  font-size: 10.5px;
+}
+
+.race-hint {
+  font-size: 10px;
+}
+
+.race-btn {
+  font-size: 11px;
+  padding: 6px 12px;
+}
+
+.race-select,
+.race-select select {
+  font-size: 11px;
+}
+
+.race-warning {
+  font-size: 11px;
+}
+
+.s5-summary {
+  width: min(860px, 92%);
+  padding: 24px 28px;
+}
+
+.s5-summary-grid {
+  gap: 12px;
+}
+
+.s5-summary-cell span {
+  font-size: 10.5px;
+}
+
+.s5-summary-cell b {
+  font-size: 30px;
+}
+
+.s5-summary-cell small {
+  font-size: 11px;
+}
+
+.s5-summary-note {
+  font-size: 12px;
+}
+
+/* ---------- 通用说明文字 ---------- */
+.data-note,
+.scene-note,
+.chart-note {
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.tooltip {
+  font-size: 12px;
+}
+
+/* ---------- S6 单条演示 ---------- */
+.s6-sub {
+  font-size: 12px;
+}
+
+.s6-sample {
+  padding: 7px 10px;
+}
+
+.s6-sample-title {
+  font-size: 11px;
+}
+
+.s6-sample-cat {
+  font-size: 10px;
+}
+
+.s6-text {
+  font-size: 13.5px;
+  line-height: 1.75;
+  padding: 14px 16px;
+}
+
+.s6-format-title {
+  font-size: 10px;
+}
+
+.s6-format-title span {
+  font-size: 10px;
+}
+
+.s6-toggles label,
+.s6-shuffle {
+  font-size: 11px;
+}
+
+.s6-toggles input,
+.s6-shuffle input {
+  width: 13px;
+  height: 13px;
+}
+
+.s6-judge {
+  font-size: 12px;
+  padding: 10px;
+}
+
+.s6-hint {
+  font-size: 10.5px;
+  min-height: 14px;
+}
+
+.s6-gauges .gauge svg {
+  max-width: 150px;
+}
+
+.s6-gauges .gauge-name {
+  font-size: 11.5px;
+}
+
+.s6-gauges .gauge-badge {
+  font-size: 10px;
+}
+
+.s6-token-text,
+.s6-reason-text {
+  font-size: 13.5px;
+  line-height: 1.75;
+  padding: 14px 16px;
+}
+
+.s6-disagree {
+  font-size: 11px;
+  padding: 9px 12px;
+}
+
+.s6-error-link {
+  font-size: 10.5px;
+}
+
+/* ---------- S7 错误分析 ---------- */
+.s7-sub {
+  font-size: 12px;
+}
+
+.s7-tab {
+  font-size: 10.5px;
+  padding: 5px 10px;
+}
+
+.conf-col,
+.conf-row {
+  font-size: 10px;
+}
+
+.conf-count b {
+  font-size: 16px;
+}
+
+.conf-count span {
+  font-size: 10px;
+}
+
+.s7-matrix-legend {
+  font-size: 10.5px;
+}
+
+.s7-filter-head {
+  font-size: 10.5px;
+}
+
+.s7-chip {
+  font-size: 11px;
+  padding: 4px 9px;
+}
+
+.s7-audit-donut {
+  width: 72px;
+  height: 72px;
+}
+
+.s7-audit-center {
+  padding-top: 27px;
+}
+
+.s7-audit-center b {
+  font-size: 14px;
+}
+
+.s7-audit-center span {
+  font-size: 10px;
+}
+
+.s7-audit-text b {
+  font-size: 11.5px;
+}
+
+.s7-audit-sub {
+  font-size: 10.5px;
+}
+
+.s7-carousel-head {
+  font-size: 12px;
+}
+
+.s7-count {
+  font-size: 10.5px;
+}
+
+.s7-page {
+  font-size: 10.5px;
+}
+
+.error-id {
+  font-size: 10.5px;
+}
+
+.error-title {
+  font-size: 12.5px;
+}
+
+.error-true {
+  font-size: 10px;
+}
+
+.error-pred {
+  font-size: 10.5px;
+}
+
+.error-pred i {
+  font-size: 10px;
+}
+
+.error-text {
+  font-size: 11.5px;
+  line-height: 1.6;
+}
+
+.error-expand {
+  font-size: 10.5px;
+}
+
+.error-cat {
+  font-size: 10px;
+}
+
+/* ---------- S8 结论 ---------- */
+.s8-sub {
+  font-size: 12px;
+}
+
+.s8-q {
+  font-size: 10.5px;
+}
+
+.s8-card h3 {
+  font-size: 16px;
+}
+
+.s8-answer {
+  font-size: 13px;
+  line-height: 1.6;
+  min-height: 54px;
+}
+
+.s8-card-foot {
+  font-size: 10.5px;
+}
+
+.s8-card-foot button {
+  font-size: 10px;
+}
+
+.s8-limits-head b {
+  font-size: 12px;
+}
+
+.s8-limits-head span {
+  font-size: 10px;
+}
+
+.s8-limits li {
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.s8-footer-block b {
+  font-size: 12px;
+}
+
+.s8-footer-block p {
+  font-size: 12px;
+}
+
+.mi-label {
+  font-size: 10.5px;
+}
+
+.mi-row b {
+  font-size: 11px;
+}
+
+.mi-note {
+  font-size: 10.5px;
+}
+
+.s8-chart {
+  min-height: 130px;
+}
+
+.s8-card {
+  min-height: 320px;
+  gap: 8px;
+  padding: 16px;
+}
+
+@media (max-height: 820px) {
+  .s3-cards .adcard-text {
+    -webkit-line-clamp: 6;
+  }
+}

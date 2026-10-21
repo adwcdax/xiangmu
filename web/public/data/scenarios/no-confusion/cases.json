@@ -1,0 +1,931 @@
+{
+  "demo": [
+    {
+      "id": "d00",
+      "modality": "sms",
+      "text": "【社区服务中心】本周六上午在小区广场开展免费义诊，请有需要的居民携带身份证前往。",
+      "turns": null,
+      "label": 0,
+      "pred": {
+        "label": 0,
+        "p_fraud": 0.01,
+        "top_k": [
+          {
+            "id": 0,
+            "prob": 0.988
+          },
+          {
+            "id": 1,
+            "prob": 0.008
+          },
+          {
+            "id": 3,
+            "prob": 0.004
+          }
+        ]
+      },
+      "cues": [],
+      "tag": "strong_correct"
+    },
+    {
+      "id": "d01",
+      "modality": "sms",
+      "text": "内部渠道，稳赚不赔，跟着老师带单操作，日收益百分之五，先加群了解。",
+      "turns": null,
+      "label": 1,
+      "pred": {
+        "label": 1,
+        "p_fraud": 0.999,
+        "top_k": [
+          {
+            "id": 1,
+            "prob": 0.97
+          },
+          {
+            "id": 2,
+            "prob": 0.02
+          },
+          {
+            "id": 3,
+            "prob": 0.01
+          }
+        ]
+      },
+      "cues": [
+        {
+          "start": 5,
+          "end": 9,
+          "kind": "收益承诺"
+        },
+        {
+          "start": 14,
+          "end": 16,
+          "kind": "投资诱导"
+        },
+        {
+          "start": 19,
+          "end": 22,
+          "kind": "收益承诺"
+        }
+      ],
+      "tag": "strong_correct"
+    },
+    {
+      "id": "d02",
+      "modality": "sms",
+      "text": "您的信用额度已提升，缴纳手续费即可放款，无需抵押，当天到账。",
+      "turns": null,
+      "label": 2,
+      "pred": {
+        "label": 2,
+        "p_fraud": 0.995,
+        "top_k": [
+          {
+            "id": 2,
+            "prob": 0.91
+          },
+          {
+            "id": 1,
+            "prob": 0.05
+          },
+          {
+            "id": 0,
+            "prob": 0.04
+          }
+        ]
+      },
+      "cues": [
+        {
+          "start": 2,
+          "end": 6,
+          "kind": "贷款诱导"
+        },
+        {
+          "start": 12,
+          "end": 15,
+          "kind": "先付款"
+        }
+      ],
+      "tag": "strong_correct"
+    },
+    {
+      "id": "d03",
+      "modality": "sms",
+      "text": "恭喜您获得平台会员资格，点击链接领取礼品，运费自理。",
+      "turns": null,
+      "label": 3,
+      "pred": {
+        "label": 3,
+        "p_fraud": 0.94,
+        "top_k": [
+          {
+            "id": 3,
+            "prob": 0.72
+          },
+          {
+            "id": 4,
+            "prob": 0.18
+          },
+          {
+            "id": 0,
+            "prob": 0.1
+          }
+        ]
+      },
+      "cues": [
+        {
+          "start": 12,
+          "end": 16,
+          "kind": "钓鱼链接"
+        },
+        {
+          "start": 21,
+          "end": 25,
+          "kind": "先付款"
+        }
+      ],
+      "tag": "strong_correct"
+    },
+    {
+      "id": "d04",
+      "modality": "sms",
+      "text": "您好，您的快递在运输途中丢失，请添加客服微信【账号】办理理赔，需先缴纳保证金。",
+      "turns": null,
+      "label": 4,
+      "pred": {
+        "label": 4,
+        "p_fraud": 1,
+        "top_k": [
+          {
+            "id": 4,
+            "prob": 0.987
+          },
+          {
+            "id": 3,
+            "prob": 0.009
+          },
+          {
+            "id": 2,
+            "prob": 0.004
+          }
+        ]
+      },
+      "cues": [
+        {
+          "start": 5,
+          "end": 14,
+          "kind": "冒充客服"
+        },
+        {
+          "start": 35,
+          "end": 38,
+          "kind": "先付款"
+        }
+      ],
+      "tag": "strong_correct"
+    },
+    {
+      "id": "d05",
+      "modality": "sms",
+      "text": "我是你领导，明天上午来我办公室一趟，先别告诉别人。",
+      "turns": null,
+      "label": 5,
+      "pred": {
+        "label": 5,
+        "p_fraud": 0.95,
+        "top_k": [
+          {
+            "id": 5,
+            "prob": 0.78
+          },
+          {
+            "id": 1,
+            "prob": 0.12
+          },
+          {
+            "id": 6,
+            "prob": 0.1
+          }
+        ]
+      },
+      "cues": [
+        {
+          "start": 0,
+          "end": 5,
+          "kind": "冒充身份"
+        },
+        {
+          "start": 18,
+          "end": 24,
+          "kind": "制造保密"
+        }
+      ],
+      "tag": "strong_correct"
+    },
+    {
+      "id": "d06",
+      "modality": "dialog",
+      "text": "坐席：你涉嫌一起洗钱案件，需要配合调查。\n客户：我没有做过啊。\n坐席：把资金转到安全账户接受审查，否则上门抓人。",
+      "turns": [
+        {
+          "role": "坐席",
+          "text": "你涉嫌一起洗钱案件，需要配合调查。"
+        },
+        {
+          "role": "客户",
+          "text": "我没有做过啊。"
+        },
+        {
+          "role": "坐席",
+          "text": "把资金转到安全账户接受审查，否则上门抓人。"
+        }
+      ],
+      "label": 6,
+      "pred": {
+        "label": 6,
+        "p_fraud": 0.999,
+        "top_k": [
+          {
+            "id": 6,
+            "prob": 0.96
+          },
+          {
+            "id": 5,
+            "prob": 0.02
+          },
+          {
+            "id": 2,
+            "prob": 0.02
+          }
+        ]
+      },
+      "cues": [
+        {
+          "start": 4,
+          "end": 12,
+          "kind": "制造恐慌"
+        },
+        {
+          "start": 40,
+          "end": 44,
+          "kind": "转账要求"
+        }
+      ],
+      "tag": "strong_correct"
+    },
+    {
+      "id": "d07",
+      "modality": "dialog",
+      "text": "坐席：我在婚恋平台看到你的资料，觉得挺合适的。\n客户：谢谢。\n坐席：我这边有个内部理财渠道，收益很稳，要不要一起做？",
+      "turns": [
+        {
+          "role": "坐席",
+          "text": "我在婚恋平台看到你的资料，觉得挺合适的。"
+        },
+        {
+          "role": "客户",
+          "text": "谢谢。"
+        },
+        {
+          "role": "坐席",
+          "text": "我这边有个内部理财渠道，收益很稳，要不要一起做？"
+        }
+      ],
+      "label": 7,
+      "pred": {
+        "label": 1,
+        "p_fraud": 0.97,
+        "top_k": [
+          {
+            "id": 1,
+            "prob": 0.71
+          },
+          {
+            "id": 7,
+            "prob": 0.24
+          },
+          {
+            "id": 3,
+            "prob": 0.05
+          }
+        ]
+      },
+      "cues": [
+        {
+          "start": 5,
+          "end": 9,
+          "kind": "婚恋搭讪"
+        },
+        {
+          "start": 39,
+          "end": 45,
+          "kind": "投资诱导"
+        }
+      ],
+      "tag": "class_overlap"
+    },
+    {
+      "id": "d08",
+      "modality": "sms",
+      "text": "兄弟，把你名下银行卡借我用一下，走一笔账，给你抽成，不会有事。",
+      "turns": null,
+      "label": 8,
+      "pred": {
+        "label": 8,
+        "p_fraud": 0.93,
+        "top_k": [
+          {
+            "id": 8,
+            "prob": 0.68
+          },
+          {
+            "id": 2,
+            "prob": 0.15
+          },
+          {
+            "id": 1,
+            "prob": 0.17
+          }
+        ]
+      },
+      "cues": [
+        {
+          "start": 7,
+          "end": 12,
+          "kind": "借卡走账"
+        },
+        {
+          "start": 23,
+          "end": 25,
+          "kind": "利益诱导"
+        }
+      ],
+      "tag": "strong_correct"
+    },
+    {
+      "id": "d09",
+      "modality": "dialog",
+      "text": "坐席：我们是部队采购，需要一批帐篷，你先垫付定金。\n客户：怎么付？\n坐席：稍后发你账户，走完流程再结算。",
+      "turns": [
+        {
+          "role": "坐席",
+          "text": "我们是部队采购，需要一批帐篷，你先垫付定金。"
+        },
+        {
+          "role": "客户",
+          "text": "怎么付？"
+        },
+        {
+          "role": "坐席",
+          "text": "稍后发你账户，走完流程再结算。"
+        }
+      ],
+      "label": 9,
+      "pred": {
+        "label": 9,
+        "p_fraud": 0.92,
+        "top_k": [
+          {
+            "id": 9,
+            "prob": 0.64
+          },
+          {
+            "id": 3,
+            "prob": 0.2
+          },
+          {
+            "id": 4,
+            "prob": 0.16
+          }
+        ]
+      },
+      "cues": [
+        {
+          "start": 6,
+          "end": 10,
+          "kind": "冒充身份"
+        },
+        {
+          "start": 20,
+          "end": 24,
+          "kind": "先付款"
+        }
+      ],
+      "tag": "strong_correct"
+    }
+  ],
+  "errors": [
+    {
+      "id": "e01",
+      "modality": "sms",
+      "text": "我是你领导，最近有个内部项目，你先转一笔钱过来。",
+      "turns": null,
+      "label": 5,
+      "pred": {
+        "label": 1,
+        "p_fraud": 0.88,
+        "top_k": [
+          {
+            "id": 1,
+            "prob": 0.52
+          },
+          {
+            "id": 5,
+            "prob": 0.31
+          },
+          {
+            "id": 6,
+            "prob": 0.17
+          }
+        ]
+      },
+      "cues": [
+        {
+          "start": 0,
+          "end": 5,
+          "kind": "冒充身份"
+        },
+        {
+          "start": 17,
+          "end": 21,
+          "kind": "转账要求"
+        }
+      ],
+      "tag": "class_overlap",
+      "note": "缺少后续借钱话术，与投资类“内部项目”线索混淆。"
+    },
+    {
+      "id": "e02",
+      "modality": "dialog",
+      "text": "坐席：我们在交友软件认识的，你还记得吗？\n客户：记得。\n坐席：我带你做一个稳赚的平台，先投一点试试。",
+      "turns": [
+        {
+          "role": "坐席",
+          "text": "我们在交友软件认识的，你还记得吗？"
+        },
+        {
+          "role": "客户",
+          "text": "记得。"
+        },
+        {
+          "role": "坐席",
+          "text": "我带你做一个稳赚的平台，先投一点试试。"
+        }
+      ],
+      "label": 7,
+      "pred": {
+        "label": 1,
+        "p_fraud": 0.96,
+        "top_k": [
+          {
+            "id": 1,
+            "prob": 0.61
+          },
+          {
+            "id": 7,
+            "prob": 0.28
+          },
+          {
+            "id": 3,
+            "prob": 0.11
+          }
+        ]
+      },
+      "cues": [
+        {
+          "start": 6,
+          "end": 10,
+          "kind": "婚恋搭讪"
+        },
+        {
+          "start": 37,
+          "end": 42,
+          "kind": "投资诱导"
+        }
+      ],
+      "tag": "class_overlap",
+      "note": "婚恋引流后转入投资话术，真实类与预测类共享“投资”线索。"
+    },
+    {
+      "id": "e03",
+      "modality": "sms",
+      "text": "您购买的商品有质量问题，我们双倍退款，请先扫码缴纳保证金。",
+      "turns": null,
+      "label": 3,
+      "pred": {
+        "label": 4,
+        "p_fraud": 0.98,
+        "top_k": [
+          {
+            "id": 4,
+            "prob": 0.55
+          },
+          {
+            "id": 3,
+            "prob": 0.32
+          },
+          {
+            "id": 2,
+            "prob": 0.13
+          }
+        ]
+      },
+      "cues": [
+        {
+          "start": 14,
+          "end": 18,
+          "kind": "利益诱导"
+        },
+        {
+          "start": 25,
+          "end": 28,
+          "kind": "先付款"
+        }
+      ],
+      "tag": "class_overlap",
+      "note": "“商品质量 + 退款”同时命中购物服务与电商客服。"
+    },
+    {
+      "id": "e04",
+      "modality": "sms",
+      "text": "您的账户被冻结了，需要把保证金转到安全账户。",
+      "turns": null,
+      "label": 4,
+      "pred": {
+        "label": 2,
+        "p_fraud": 0.91,
+        "top_k": [
+          {
+            "id": 2,
+            "prob": 0.49
+          },
+          {
+            "id": 4,
+            "prob": 0.35
+          },
+          {
+            "id": 0,
+            "prob": 0.16
+          }
+        ]
+      },
+      "cues": [
+        {
+          "start": 2,
+          "end": 7,
+          "kind": "制造恐慌"
+        },
+        {
+          "start": 17,
+          "end": 21,
+          "kind": "转账要求"
+        }
+      ],
+      "tag": "class_overlap",
+      "note": "短文本缺少物流关键词，被判为信用服务类。"
+    },
+    {
+      "id": "e05",
+      "modality": "dialog",
+      "text": "坐席：您的包裹在分拣中心丢了。\n客户：然后呢？\n坐席：加我微信，填一下理赔信息。",
+      "turns": [
+        {
+          "role": "坐席",
+          "text": "您的包裹在分拣中心丢了。"
+        },
+        {
+          "role": "客户",
+          "text": "然后呢？"
+        },
+        {
+          "role": "坐席",
+          "text": "加我微信，填一下理赔信息。"
+        }
+      ],
+      "label": 4,
+      "pred": {
+        "label": 0,
+        "p_fraud": 0.42,
+        "top_k": [
+          {
+            "id": 0,
+            "prob": 0.58
+          },
+          {
+            "id": 4,
+            "prob": 0.3
+          },
+          {
+            "id": 2,
+            "prob": 0.12
+          }
+        ]
+      },
+      "cues": [
+        {
+          "start": 5,
+          "end": 14,
+          "kind": "冒充客服"
+        }
+      ],
+      "tag": "weak_class",
+      "note": "弱类漏判：对话过短，未出现“保证金”“退款”等强线索。"
+    },
+    {
+      "id": "e06",
+      "modality": "sms",
+      "text": "我们是部队采购，需要一批物资，你先垫付。",
+      "turns": null,
+      "label": 9,
+      "pred": {
+        "label": 3,
+        "p_fraud": 0.7,
+        "top_k": [
+          {
+            "id": 3,
+            "prob": 0.44
+          },
+          {
+            "id": 9,
+            "prob": 0.33
+          },
+          {
+            "id": 0,
+            "prob": 0.23
+          }
+        ]
+      },
+      "cues": [
+        {
+          "start": 3,
+          "end": 7,
+          "kind": "冒充身份"
+        },
+        {
+          "start": 17,
+          "end": 19,
+          "kind": "先付款"
+        }
+      ],
+      "tag": "weak_class",
+      "note": "弱类漏判：采购话术与购物服务类高度重叠。"
+    },
+    {
+      "id": "e07",
+      "modality": "dialog",
+      "text": "客户：网上认识的朋友说带我投资。\n坐席：您转账了吗？\n客户：还没有，他让我先下载一个软件。",
+      "turns": [
+        {
+          "role": "客户",
+          "text": "网上认识的朋友说带我投资。"
+        },
+        {
+          "role": "坐席",
+          "text": "您转账了吗？"
+        },
+        {
+          "role": "客户",
+          "text": "还没有，他让我先下载一个软件。"
+        }
+      ],
+      "label": 7,
+      "pred": {
+        "label": 0,
+        "p_fraud": 0.45,
+        "top_k": [
+          {
+            "id": 0,
+            "prob": 0.55
+          },
+          {
+            "id": 7,
+            "prob": 0.3
+          },
+          {
+            "id": 1,
+            "prob": 0.15
+          }
+        ]
+      },
+      "cues": [
+        {
+          "start": 11,
+          "end": 15,
+          "kind": "投资诱导"
+        }
+      ],
+      "tag": "weak_class",
+      "note": "弱类漏判：咨询口吻、没有既遂行为，模型偏向无风险。"
+    },
+    {
+      "id": "e08",
+      "modality": "sms",
+      "text": "把银行卡借我走账，给你抽成。",
+      "turns": null,
+      "label": 8,
+      "pred": {
+        "label": 2,
+        "p_fraud": 0.58,
+        "top_k": [
+          {
+            "id": 2,
+            "prob": 0.46
+          },
+          {
+            "id": 8,
+            "prob": 0.36
+          },
+          {
+            "id": 0,
+            "prob": 0.18
+          }
+        ]
+      },
+      "cues": [
+        {
+          "start": 1,
+          "end": 6,
+          "kind": "借卡走账"
+        },
+        {
+          "start": 11,
+          "end": 13,
+          "kind": "利益诱导"
+        }
+      ],
+      "tag": "weak_class",
+      "note": "弱类漏判：借卡走账与信用服务类的“账户”线索混淆。"
+    },
+    {
+      "id": "e09",
+      "modality": "sms",
+      "text": "招聘兼职，日结工资，多劳多得。",
+      "turns": null,
+      "label": 0,
+      "pred": {
+        "label": 1,
+        "p_fraud": 0.65,
+        "top_k": [
+          {
+            "id": 1,
+            "prob": 0.57
+          },
+          {
+            "id": 0,
+            "prob": 0.35
+          },
+          {
+            "id": 3,
+            "prob": 0.08
+          }
+        ]
+      },
+      "cues": [
+        {
+          "start": 5,
+          "end": 9,
+          "kind": "利益诱导"
+        }
+      ],
+      "tag": "benign_fp",
+      "note": "正常兼职信息被“日结”“多劳多得”带到投资类。"
+    },
+    {
+      "id": "e10",
+      "modality": "sms",
+      "text": "双十一促销，全场五折，先到先得。",
+      "turns": null,
+      "label": 0,
+      "pred": {
+        "label": 3,
+        "p_fraud": 0.6,
+        "top_k": [
+          {
+            "id": 3,
+            "prob": 0.52
+          },
+          {
+            "id": 0,
+            "prob": 0.4
+          },
+          {
+            "id": 4,
+            "prob": 0.08
+          }
+        ]
+      },
+      "cues": [
+        {
+          "start": 3,
+          "end": 5,
+          "kind": "营销话术"
+        }
+      ],
+      "tag": "benign_fp",
+      "note": "正常促销短信与购物服务类的营销话术重叠。"
+    },
+    {
+      "id": "e11",
+      "modality": "sms",
+      "text": "您的快递已到小区驿站，请凭取件码领取。",
+      "turns": null,
+      "label": 0,
+      "pred": {
+        "label": 4,
+        "p_fraud": 0.56,
+        "top_k": [
+          {
+            "id": 4,
+            "prob": 0.48
+          },
+          {
+            "id": 0,
+            "prob": 0.44
+          },
+          {
+            "id": 3,
+            "prob": 0.08
+          }
+        ]
+      },
+      "cues": [
+        {
+          "start": 2,
+          "end": 6,
+          "kind": "物流通知"
+        }
+      ],
+      "tag": "benign_fp",
+      "note": "正常物流通知被误判为电商客服类。"
+    },
+    {
+      "id": "e12",
+      "modality": "sms",
+      "text": "社区民警提醒：近期冒充公检法诈骗多发，请提高警惕。",
+      "turns": null,
+      "label": 0,
+      "pred": {
+        "label": 6,
+        "p_fraud": 0.58,
+        "top_k": [
+          {
+            "id": 6,
+            "prob": 0.51
+          },
+          {
+            "id": 0,
+            "prob": 0.42
+          },
+          {
+            "id": 5,
+            "prob": 0.07
+          }
+        ]
+      },
+      "cues": [
+        {
+          "start": 9,
+          "end": 14,
+          "kind": "反诈提醒"
+        }
+      ],
+      "tag": "benign_fp",
+      "note": "反诈宣传本身包含“公检法”关键词，被误判为冒充公检法类。"
+    }
+  ],
+  "out_of_domain": [
+    {
+      "id": "o01",
+      "title": "普工招聘",
+      "text": "【职位名称】普工，月薪六千至八千，包吃住，工作地点在城东工业园，无需经验，当天可安排面试。",
+      "label": "benign",
+      "p_fraud": 0.97,
+      "note": "正常岗位帖被判为诈骗"
+    },
+    {
+      "id": "o02",
+      "title": "仓库分拣员",
+      "text": "招聘仓库分拣员若干名，负责货物扫描与码放，八小时工作制，入职缴纳社保。",
+      "label": "benign",
+      "p_fraud": 0.95,
+      "note": "正常岗位帖被判为诈骗"
+    },
+    {
+      "id": "o03",
+      "title": "餐厅服务员",
+      "text": "餐厅招聘服务员，包工作餐，月休四天，有经验优先，地址在商业街。",
+      "label": "benign",
+      "p_fraud": 0.94,
+      "note": "正常岗位帖被判为诈骗"
+    },
+    {
+      "id": "o04",
+      "title": "司机",
+      "text": "招聘货运司机，要求持证，路线固定，月结运费，车辆由公司提供。",
+      "label": "benign",
+      "p_fraud": 0.93,
+      "note": "正常岗位帖被判为诈骗"
+    }
+  ],
+  "mock": true
+}

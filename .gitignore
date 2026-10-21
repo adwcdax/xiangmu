@@ -19,3 +19,8 @@ data_0/
 .idea/workspace.xml
 .DS_Store
 Thumbs.db
+# 英文招聘子项目已弃用：代码与文档不入库（原始数据 data/raw、data/data_process 保留）
+fasttext/src/
+fasttext/api/
+fasttext/docs/技术说明.md
+fasttext/docs/API.md

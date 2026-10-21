@@ -93,20 +93,26 @@ export function createLegacyZhClient(): ApiClient {
       };
     },
     async models(): Promise<ModelList> {
+      // 同一套 legacy 契约后面可能是 fastText 或随机森林，按 /health 返回的模型名区分。
+      const isForest = /rf|forest|xgb/i.test(cachedModel);
       return {
         default: cachedModel,
         models: [
           {
             id: cachedModel,
-            name: 'fastText（兼容模式）',
-            description: '对接现有 api_zh 服务，10 类多分类',
+            name: isForest ? '随机森林（兼容模式）' : 'fastText（兼容模式）',
+            description: isForest
+              ? '对接现有 randomforest/api.py，10 类多分类'
+              : '对接现有 api_zh 服务，10 类多分类',
             task: 'multiclass',
             status: 'ready',
             classes: 10,
             threshold: 0.5,
             max_chars: 2000,
             latency_hint_ms: 2,
-            metrics: { macro_f1: 0.7365, fraud_f1: 0.9833 },
+            metrics: isForest
+              ? { macro_f1: 0.7076, fraud_f1: 0.979 }
+              : { macro_f1: 0.7365, fraud_f1: 0.9833 },
             domain: '中文电诈短信 / 对话 / 案情描述',
           },
         ],

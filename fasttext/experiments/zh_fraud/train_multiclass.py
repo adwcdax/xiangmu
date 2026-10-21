@@ -2,11 +2,13 @@
 """
 中文电诈多分类（10 类：无风险 + 9 类诈骗手法）
 
-数据：data_0/中文电诈语料_统一表.csv（352,836 条，sha256 与 data/raw_zh/manifest_raw.json 一致）
-  字段：sample_id / modality / label_zh / label_slug / text / group / split / source
-  已具备：组级切分（group 不跨 split）、零重复、10 类齐全
+默认输入：data/zh_data_process（仓库内成品数据集，352,836 条，
+train/dev/test.txt 每行 文本\t标签，标签为 class.txt 行号）
+加 --csv 可改回源表 data_0/中文电诈语料_统一表.csv（字段
+sample_id / modality / label_zh / label_slug / text / group / split / source，
+已具备组级切分、零重复、10 类齐全）
 
-流程：TSV -> 逐字分词 -> fastText 监督多分类 -> 逐类 P/R/F1 + 混淆矩阵 + 塌回二分类对照
+流程：数据集 -> 逐字分词 -> fastText 监督多分类 -> 逐类 P/R/F1 + 混淆矩阵 + 塌回二分类对照
 
 产物：models_zh/data/{train,dev,test}.txt、models_zh/fasttext_zh_fraud.bin、metrics.json
 """
@@ -25,10 +27,10 @@ from pathlib import Path
 
 import fasttext
 
-PROJECT = Path(__file__).resolve().parents[2]      # fasttext/
-ROOT = PROJECT.parent                              # 仓库根目录
+ROOT = Path(__file__).resolve().parents[2] if "experiments" in str(Path(__file__).resolve()) else Path.cwd()
 CSV_PATH = ROOT / "data_0" / "中文电诈语料_统一表.csv"
-OUT_DIR = PROJECT / "models_zh"
+DATASET_DIR = ROOT / "data" / "zh_data_process"
+OUT_DIR = ROOT / "models_zh"
 WS = re.compile(r"\s+")
 BENIGN = "无风险"
 
@@ -39,9 +41,35 @@ def load(path: Path) -> list[dict]:
         return [r for r in csv.DictReader(f) if (r.get("text") or "").strip()]
 
 
+def to_fasttext_text(text: str) -> str:
+    """空白归一 -> 去掉所有空格 -> 逐字加空格（与文档第 3 节一致）"""
+    return " ".join(WS.sub(" ", text).strip().replace(" ", ""))
+
+
+def load_dataset_dir(d: Path) -> tuple[list[str], dict[str, tuple[list[str], list[int]]], dict]:
+    """读标准数据集目录（每行 文本\\t标签，标签为 class.txt 行号），返回类别表、三个切分与 manifest"""
+    classes = [ln.strip() for ln in (d / "class.txt").read_text(encoding="utf-8").splitlines() if ln.strip()]
+    manifest = json.loads((d / "manifest.json").read_text(encoding="utf-8"))
+    splits: dict[str, tuple[list[str], list[int]]] = {}
+    for split in ("train", "dev", "test"):
+        texts, labels = [], []
+        for line in (d / f"{split}.txt").read_text(encoding="utf-8").splitlines():
+            if not line:
+                continue
+            text, _, label = line.rpartition("\t")
+            texts.append(to_fasttext_text(text))
+            labels.append(int(label))
+        expect = manifest["splits"][split]["rows"]
+        if len(texts) != expect:
+            raise ValueError(f"{split}.txt 行数 {len(texts)} 与 manifest 记录 {expect} 不一致")
+        splits[split] = (texts, labels)
+    return classes, splits, manifest
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--csv", type=Path, default=CSV_PATH)
+    ap.add_argument("--csv", type=Path, default=None, help="源表 data_0/中文电诈语料_统一表.csv（不传则读 --dataset-dir）")
+    ap.add_argument("--dataset-dir", type=Path, default=DATASET_DIR, help="标准数据集目录（train/dev/test.txt）")
     ap.add_argument("--out-dir", type=Path, default=OUT_DIR)
     ap.add_argument("--dim", type=int, default=50)
     ap.add_argument("--epoch", type=int, default=25)
@@ -52,42 +80,45 @@ def main() -> None:
     ap.add_argument("--thread", type=int, default=os.cpu_count() or 4)
     args = ap.parse_args()
 
-    rows = load(args.csv)
-    counter = Counter(r["label_zh"] for r in rows)
-    # 无风险固定 index 0，其余按样本量降序
-    classes = [BENIGN] + [c for c, _ in counter.most_common() if c != BENIGN]
-    cls_idx = {c: i for i, c in enumerate(classes)}
-    print(f"{len(rows)} 条，{len(classes)} 类：")
+    if args.csv is not None:
+        rows = load(args.csv)
+        counter = Counter(r["label_zh"] for r in rows)
+        # 无风险固定 index 0，其余按样本量降序
+        classes = [BENIGN] + [c for c, _ in counter.most_common() if c != BENIGN]
+        cls_idx = {c: i for i, c in enumerate(classes)}
+        parts: dict[str, tuple[list[str], list[int]]] = {}
+        for split in ("train", "dev", "test"):
+            sel = [r for r in rows if r["split"] == split]
+            parts[split] = ([to_fasttext_text(r["text"]) for r in sel],
+                            [cls_idx[r["label_zh"]] for r in sel])
+        source = f"{args.csv}（sha256 710da892…，与 raw_zh manifest 一致）"
+    else:
+        classes, parts, manifest = load_dataset_dir(args.dataset_dir)
+        cls_idx = {c: i for i, c in enumerate(classes)}
+        source = f"{args.dataset_dir}（源表 {manifest['source_file']}，sha256 {manifest['source_sha256'][:8]}…）"
+    rows_total = sum(len(t) for t, _ in parts.values())
+    print(f"{rows_total} 条，{len(classes)} 类：")
     for c in classes:
-        print(f"  [{cls_idx[c]}] {c:<22s} {counter[c]:7d} ({counter[c]/len(rows):5.1%})")
+        n = sum(1 for _, ys in parts.values() for y in ys if y == cls_idx[c])
+        print(f"  [{cls_idx[c]}] {c:<22s} {n:7d} ({n / rows_total:5.1%})")
 
     data_dir = args.out_dir / "data"
     data_dir.mkdir(parents=True, exist_ok=True)
     stats = defaultdict(dict)
     for split in ("train", "dev", "test"):
-        part = [r for r in rows if r["split"] == split]
+        texts, labels = parts[split]
         path = data_dir / f"{split}.txt"
         with path.open("w", encoding="utf-8", newline="\n") as f:
-            for r in part:
-                text = WS.sub(" ", r["text"]).strip().replace(" ", "")
-                f.write(f"__label__{cls_idx[r['label_zh']]} {' '.join(text)}\n")
-        stats[split] = {"rows": len(part),
-                        "class_counts": {c: sum(1 for r in part if r["label_zh"] == c) for c in classes}}
-        print(f"{split:5s} {len(part):6d} -> {path}")
+            for text, label in zip(texts, labels):
+                f.write(f"__label__{label} {text}\n")
+        stats[split] = {"rows": len(texts),
+                        "class_counts": {c: sum(1 for l in labels if l == i)
+                                         for i, c in enumerate(classes)}}
+        print(f"{split:5s} {len(texts):6d} -> {path}")
 
-    def load_ft(path: Path):
-        xs, ys = [], []
-        for line in path.read_text(encoding="utf-8").splitlines():
-            if not line:
-                continue
-            head, _, body = line.partition(" ")
-            ys.append(int(head.replace("__label__", "")))
-            xs.append(body)
-        return xs, ys
-
-    tr_x, tr_y = load_ft(data_dir / "train.txt")
-    dv_x, dv_y = load_ft(data_dir / "dev.txt")
-    te_x, te_y = load_ft(data_dir / "test.txt")
+    tr_x, tr_y = parts["train"]
+    dv_x, dv_y = parts["dev"]
+    te_x, te_y = parts["test"]
 
     print(f"\n训练 {len(tr_x)} 条，dim={args.dim} epoch={args.epoch} lr={args.lr} ng={args.word_ngrams}")
     t0 = time.perf_counter()
@@ -140,8 +171,8 @@ def main() -> None:
     model.save_model(str(model_path))
     report = {
         "task": "中文电诈案件分类（10 类：无风险 + 9 类手法）",
-        "source": "data_0/中文电诈语料_统一表.csv（sha256 710da892…，与 raw_zh manifest 一致）",
-        "classes": classes, "rows": len(rows), "split_stats": stats,
+        "source": source,
+        "classes": classes, "rows": rows_total, "split_stats": stats,
         "params": {"dim": args.dim, "epoch": args.epoch, "lr": args.lr,
                    "wordNgrams": args.word_ngrams, "bucket": args.bucket, "minCount": args.min_count},
         "train_seconds": seconds,

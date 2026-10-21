@@ -33,3 +33,11 @@ randomforest/models/*
 !randomforest/models/confusion_matrix.png
 !randomforest/models/train_log.json
 randomforest/processing/
+
+# BERT 链路：权重 409MB 不入库；配置与指标入库
+bert/model/*
+!bert/model/config.json
+!bert/model/tokenizer.json
+!bert/model/tokenizer_config.json
+!bert/model/metrics_full_test.json
+!bert/model/metrics_sampled12k.json

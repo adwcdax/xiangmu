@@ -1,7 +1,7 @@
-# 中文电诈识别（fastText + 随机森林）
+# 中文电诈识别（fastText + 随机森林 + BERT）
 
-对中文电诈文本做 **10 类分类**（无风险 + 9 类诈骗手法），提供两条可对比的模型链路，
-并把模型封装成在线 HTTP 接口。
+对中文电诈文本做 **10 类分类**（无风险 + 9 类诈骗手法），提供三条可对比的模型链路，
+并把模型封装成同一套在线 HTTP 接口。
 
 ## 结果速览
 
@@ -21,17 +21,27 @@
 > 强类可用于分流与预标注；弱类（婚恋、电商客服、军警）只能出候选。
 > 域外（如招聘岗位帖）无区分能力，见评估文档第 5 节。
 
-## 两条模型链路
+## 三条模型链路
 
-| 链路 | 特征 / 模型 | 入口 | 测试集 acc / macro-F1 |
-|---|---|---|---|
-| fastText | 字级 n-gram + 线性 softmax | `fasttext/` | **0.8654 / 0.7365** |
-| 随机森林 | jieba + TF-IDF + XGBoost | `randomforest/` | 0.8483 / 0.7076 |
+| 链路 | 特征 / 模型 | 入口 | 测试集 acc / macro-F1 | 吞吐（CPU/GPU） |
+|---|---|---|---|---|
+| fastText | 字级 n-gram + 线性 softmax | `fasttext/` | 0.8654 / 0.7365 | 40,000 条/s |
+| 随机森林 | jieba + TF-IDF + XGBoost | `randomforest/` | 0.8483 / 0.7076 | 批量推理 |
+| **BERT** | chinese-roberta-wwm-ext 微调 | `bert/` | **0.8730 / 0.7572** | 22 / 490 条/s |
 
-两者共用 `data/zh_data_process/` 与同一套 10 类标签，可直接对比选型。
-随机森林文档：[技术](randomforest/docs/技术文档-随机森林.md) ·
-[评估](randomforest/docs/评估文档-随机森林.md) ·
-[API](randomforest/docs/API文档-随机森林.md)
+三者共用 `data/zh_data_process/` 与同一套 10 类标签、同一套 API 契约，可直接对比选型。
+
+- 随机森林：[技术](randomforest/docs/技术文档-随机森林.md) ·
+  [评估](randomforest/docs/评估文档-随机森林.md) ·
+  [API](randomforest/docs/API文档-随机森林.md)
+- BERT：[README](bert/README.md) ·
+  [技术](bert/docs/技术文档-BERT.md) ·
+  [评估](bert/docs/评估文档-BERT.md) ·
+  [API](bert/docs/API文档-BERT.md)
+
+BERT 在全量 test 上比 fastText 高 0.0207 macro-F1，逐类全部持平或上涨，
+但推理慢两个数量级（GPU 490 条/s vs CPU 40,000 条/s）。
+**离线批处理 / 预标注选 BERT，高 QPS 在线接口选 fastText。**
 
 ## 目录结构
 
@@ -51,6 +61,12 @@ randomforest/                   随机森林链路（TF-IDF + XGBoost）
   config.py / data_processing.py / train.py / evaluate.py / predict.py / api.py
   docs/                         技术 / 评估 / API 文档
   processing/  models/          中间产物与模型（不入库）
+bert/                           BERT 链路（chinese-roberta-wwm-ext 微调）
+  api.py                        在线服务（与 api_zh 同契约）
+  export_model.py               训练检查点 -> HuggingFace 标准目录
+  src/                          训练与评估脚本
+  docs/                         技术 / 评估 / API 文档
+  model/                        权重与配置（不入库，需自行导出）
 web/                            演示页（Vite + TypeScript，含在线检测台与 10 个场景）
   src/api/                      v1 / legacy / mock 三种客户端
   src/scenes/                   S0–S9
@@ -90,8 +106,17 @@ python -m venv .venv
 .venv/Scripts/python.exe fasttext/api_zh/app.py     # 默认 8000，读 PORT 环境变量
 ```
 
-模型文件不入库（`fasttext/models_zh/`、`fasttext/api_zh/model/*.bin` 已在 `.gitignore` 中），
-部署前需先跑训练，或把训练好的模型放到 `fasttext/api_zh/model/fasttext_zh_fraud.bin`。
+模型文件不入库（`fasttext/models_zh/`、`fasttext/api_zh/model/*.bin`、`bert/model/` 已在 `.gitignore` 中），
+部署前需先跑训练，或把训练好的模型放到对应目录。
+
+BERT 链路额外需要两步：
+
+```bash
+python -m pip install -r bert/requirements.txt
+python -X utf8 bert/src/train_bert_multiclass.py --out-dir models_zh/bert
+python -X utf8 bert/export_model.py --ckpt models_zh/bert/model.pt \n    --encoder D:/heima/model/chinese-roberta-wwm-ext --out bert/model
+PORT=8001 python -X utf8 bert/api.py      # 与 fastText 同机不同端口
+```
 
 ## 在线接口
 
@@ -110,9 +135,13 @@ curl -X POST "http://127.0.0.1:8000/predict" -H "Content-Type: application/json"
 
 ## 文档
 
-- [技术文档](fasttext/docs/技术文档-电诈识别.md)：数据、切分、预处理、模型与复现
-- [评估文档](fasttext/docs/评估文档-电诈识别.md)：指标、混淆、校准、域迁移检验、可用性
-- [API 文档](fasttext/docs/API文档-电诈识别.md)：接口契约、示例、阈值与限制
+- **fastText**：[技术文档](fasttext/docs/技术文档-电诈识别.md) ·
+  [评估文档](fasttext/docs/评估文档-电诈识别.md) ·
+  [API 文档](fasttext/docs/API文档-电诈识别.md)
+- **BERT**：[README](bert/README.md) ·
+  [技术文档](bert/docs/技术文档-BERT.md) ·
+  [评估文档](bert/docs/评估文档-BERT.md) ·
+  [API 文档](bert/docs/API文档-BERT.md)
 
 ## 数据来源
 
@@ -126,3 +155,5 @@ curl -X POST "http://127.0.0.1:8000/predict" -H "Content-Type: application/json"
 2. 短文本（<30 字）判定不可靠，接口会返回 `warnings`。
 3. 标签体系无「刷单返利类」，刷单话术归入投资理财（占该类 83.9%）。
 4. 概率高度饱和，不宜直接作风险分级。
+5. 电商客服 / 信用服务 / 购物服务三类互混严重（BERT 上占 27.9%），属话术重叠，
+   建议业务侧合并为「客服类诈骗」再细分。

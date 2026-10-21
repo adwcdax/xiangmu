@@ -7,10 +7,10 @@
 
 | 子项目 | 语言 | 任务 | 入口 |
 |---|---|---|---|
-| 招聘广告欺诈检测 | 英文 | 二分类（正常 / 欺诈） | `src/` + `api/` |
-| 中文电诈识别 | 中文 | 10 类多分类（无风险 + 9 类手法） | `experiments/zh_fraud/` + `api_zh/` |
+| 招聘广告欺诈检测 | 英文 | 二分类（正常 / 欺诈） | `fasttext/src/` + `fasttext/api/` |
+| 中文电诈识别 | 中文 | 10 类多分类（无风险 + 9 类手法） | `fasttext/experiments/zh_fraud/` + `fasttext/api_zh/` |
 
-中文电诈部分见 [技术文档](docs/技术文档-电诈识别.md)、[评估文档](docs/评估文档-电诈识别.md)、[API 文档](docs/API文档-电诈识别.md)。
+中文电诈部分见 [技术文档](fasttext/docs/技术文档-电诈识别.md)、[评估文档](fasttext/docs/评估文档-电诈识别.md)、[API 文档](fasttext/docs/API文档-电诈识别.md)。
 
 ## 结果速览
 
@@ -32,42 +32,36 @@ Top-100 命中 47%（47/100），基线正例率仅 4.82%。
 ```
 data/
   raw/fake_job_postings.csv     原始 EMSCAD 数据（17,880 × 18）
-  data_process/                 清洗与组级切分产物（train/dev/test.txt、index.tsv、leakage_report.json）
-src/
-  paths.py                      统一路径（读 data/data_process/config.py）
-  prepare.py                    正文清洗 -> fastText 格式
-  prepare_features.py           结构化字段 -> 特征 token，拼接到正文
-  train.py                      训练 + 评估（多组超参按 dev PR-AUC 选优）
-  resplit.py                    按近重复簇重新切分（泄漏自检）
-  predict.py                    单条推理
-api/
-  app.py                        FastAPI 服务（/health、/predict、测试页）
-  features.py                   推理端特征拼接（与训练同逻辑）
-  vocab.json                    行业/职能词表快照
-  requirements.txt              服务依赖
-  model/                        模型文件（不入库，见下）
-docs/
-  技术说明.md                    数据、切分、特征、模型、评估与局限
-  API.md                        接口文档
+  data_process/                 英文清洗与组级切分产物
+  zh_data_process/              中文电诈语料（352,836 条 / 10 类）
+data_0/                         中文电诈原始语料（189MB，不入库）
+fasttext/
+  src/                          英文招聘模型：paths / prepare / prepare_features / train / predict
+  api/                          英文招聘 API（FastAPI）
+  api_zh/                       中文电诈 API（FastAPI）
+  experiments/zh_fraud/         中文电诈：建集、训练、自切分、校准、域混合实验
+  models/  models_zh/           训练产物（不入库）
+  docs/                         技术文档、评估文档、API 文档（中英各三份）
+  requirements.txt              训练依赖
 ```
 
 ## 快速开始
 
 ```bash
 python -m venv .venv
-.venv/Scripts/python.exe -m pip install -r requirements.txt
+.venv/Scripts/python.exe -m pip install -r fasttext/requirements.txt
 
 # 1) 正文 -> fastText 格式（输出 models/data）
-.venv/Scripts/python.exe -X utf8 src/prepare.py
+.venv/Scripts/python.exe -X utf8 fasttext/src/prepare.py
 
 # 2) 拼结构化特征（输出 models/data_feat）
-.venv/Scripts/python.exe -X utf8 src/prepare_features.py
+.venv/Scripts/python.exe -X utf8 fasttext/src/prepare_features.py
 
 # 3) 训练与评估（模型与指标写到 models/）
-.venv/Scripts/python.exe -X utf8 src/train.py --data-dir models/data_feat --model-dir models
+.venv/Scripts/python.exe -X utf8 fasttext/src/train.py --data-dir models/data_feat --model-dir models
 
 # 4) 单条推理
-.venv/Scripts/python.exe -X utf8 src/predict.py --text "Work from home, earn $3000/week, pay a $50 fee"
+.venv/Scripts/python.exe -X utf8 fasttext/src/predict.py --text "Work from home, earn $3000/week, pay a $50 fee"
 ```
 
 模型文件不入库（`models/`、`api/model/*.bin` 已在 `.gitignore` 中），
@@ -75,7 +69,7 @@ python -m venv .venv
 
 ## 在线接口
 
-服务启动后提供 `/health` 与 `/predict`，契约见 [docs/API.md](docs/API.md)。
+服务启动后提供 `/health` 与 `/predict`，契约见 [docs/API.md](fasttext/docs/API.md)。
 
 ```bash
 curl -X POST "http://127.0.0.1:8000/predict" -H "Content-Type: application/json" \
@@ -89,5 +83,5 @@ curl -X POST "http://127.0.0.1:8000/predict" -H "Content-Type: application/json"
 
 ## 文档
 
-- [技术说明](docs/技术说明.md)：数据链、切分策略、特征工程、指标与已知局限
-- [API 文档](docs/API.md)：接口定义、字段说明、调用示例
+- [技术说明](fasttext/docs/技术说明.md)：数据链、切分策略、特征工程、指标与已知局限
+- [API 文档](fasttext/docs/API.md)：接口定义、字段说明、调用示例

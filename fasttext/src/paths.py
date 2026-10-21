@@ -11,9 +11,10 @@ from __future__ import annotations
 import importlib.util
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
+PROJECT = Path(__file__).resolve().parents[1]      # fasttext/
+ROOT = PROJECT.parent                              # 仓库根目录
 DATA_DIR = ROOT / "data" / "data_process"
-MODEL_DIR = ROOT / "models"
+MODEL_DIR = PROJECT / "models"
 FT_DATA_DIR = MODEL_DIR / "data"
 
 _spec = importlib.util.spec_from_file_location("en_dataset_config", DATA_DIR / "config.py")

@@ -5,10 +5,10 @@ __pycache__/
 venv/
 
 # 训练产物：模型与中间数据体积大，不入库
-models/
-models_zh/
-api/model/*.bin
-api_zh/model/*.bin
+fasttext/models/
+fasttext/models_zh/
+fasttext/api/model/*.bin
+fasttext/api_zh/model/*.bin
 
 # 原始大语料（189MB/230MB，不入库）
 data_0/

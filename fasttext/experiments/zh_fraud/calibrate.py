@@ -22,9 +22,10 @@ import fasttext
 import numpy as np
 from sklearn.isotonic import IsotonicRegression
 
-ROOT = Path(__file__).resolve().parents[2]
-MODEL = ROOT / "models_zh" / "fasttext_zh_fraud.bin"
-DATA = ROOT / "models_zh" / "data"
+PROJECT = Path(__file__).resolve().parents[2]      # fasttext/
+ROOT = PROJECT.parent                              # 仓库根目录
+MODEL = PROJECT / "models_zh" / "fasttext_zh_fraud.bin"
+DATA = PROJECT / "models_zh" / "data"
 REAL_ZC = ROOT / "data" / "中文虚假招聘_标注7392条.csv"
 LABEL_PREFIX = "__label__"
 WS = re.compile(r"\s+")
@@ -80,7 +81,7 @@ def topk(y, p, ks):
 
 def main() -> None:
     model = fasttext.load_model(str(MODEL))
-    classes = json.loads((ROOT / "models_zh" / "metrics.json").read_text(encoding="utf-8"))["classes"]
+    classes = json.loads((PROJECT / "models_zh" / "metrics.json").read_text(encoding="utf-8"))["classes"]
     n = len(classes)
 
     dv_x, dv_y = load_ft(DATA / "dev.txt")
@@ -132,7 +133,7 @@ def main() -> None:
         "note": "真实 58 同城正常岗位帖，与电诈语料不同域，用作误报压力测试",
     }
 
-    (ROOT / "models_zh" / "calibration_report.json").write_text(
+    (PROJECT / "models_zh" / "calibration_report.json").write_text(
         json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8", newline="\n")
 
     b, a = report["before"], report["after_isotonic"]

@@ -5,15 +5,15 @@
 | 环境 | 地址 |
 |---|---|
 | 线上 | `https://job-scam-detector.app.workbuddy.host` |
-| 本地 | `http://127.0.0.1:8000`（`PORT=8000 python api_zh/app.py`） |
+| 本地 | `http://127.0.0.1:8000`（`PORT=8000 python fasttext/api_zh/app.py`） |
 
 线上所有请求必须带分享码：`?sharecode=HIF2O7TOW3`，否则网关返回“链接不完整”。
 
 启动服务：
 
 ```bash
-python -m pip install -r api_zh/requirements.txt
-PORT=8000 python api_zh/app.py
+python -m pip install -r fasttext/api_zh/requirements.txt
+PORT=8000 python fasttext/api_zh/app.py
 ```
 
 ## 2. 接口一览
@@ -99,6 +99,7 @@ curl "https://job-scam-detector.app.workbuddy.host/health?sharecode=HIF2O7TOW3"
 | `p_fraud` | float | 非“无风险”的总概率 = 1 − p(无风险) |
 | `threshold` | float | 当前阈值，默认 0.5，可用环境变量 `THRESHOLD` 覆盖 |
 | `top_k` | array | 前 K 类及概率 |
+| `warnings` | array | 提示信息，如文本过短（<30 字）时给出告警 |
 
 批量返回：
 
@@ -150,3 +151,5 @@ print(detect("您的快递丢失，请加客服微信理赔，需先缴纳保证
 3. **弱类不可单独采信**：婚恋交友 F1 0.469、电商客服 0.643、军警购物 0.628。
 4. **无状态**：服务不落库、不留存请求内容；单条毫秒级，批量 500 条约 1 秒。
 5. 线上应用与英文招聘模型共用同一个发布应用，**重新发布会覆盖对方**，两者不能同时在线。
+6. **短文本不可靠**：短于 30 字的输入会被判为「无风险」（训练语料中位 121 字），响应里会带 `warnings`。
+7. **无「刷单返利类」**：刷单话术归入「虚假网络投资理财类」（语料中占 83.9%）。

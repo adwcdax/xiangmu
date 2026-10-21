@@ -54,7 +54,10 @@ def predict_one(text: str, top_k: int = 3) -> dict:
     pairs = [(CLASSES[int(l.replace(LP, ""))], float(p)) for l, p in zip(labels[0], probs[0])]
     pairs.sort(key=lambda x: -x[1])
     p_benign = next(p for name, p in pairs if name == CLASSES[0])
-    p_fraud = 1.0 - p_benign
+    p_fraud = max(0.0, min(1.0, 1.0 - p_benign))     # 夹住浮点误差，避免 -0.0
+    warnings = []
+    if len(text.strip()) < 30:
+        warnings.append("文本较短（<30 字）：训练语料中位长度 121 字，短文本判定不可靠")
     return {
         "label": pairs[0][0],
         "label_id": CLASSES.index(pairs[0][0]),
@@ -62,6 +65,7 @@ def predict_one(text: str, top_k: int = 3) -> dict:
         "p_fraud": round(p_fraud, 4),
         "threshold": THRESHOLD,
         "top_k": [{"label": name, "prob": round(p, 4)} for name, p in pairs[:max(1, top_k)]],
+        "warnings": warnings,
     }
 
 

@@ -22,8 +22,9 @@ from pathlib import Path
 import fasttext
 import numpy as np
 
-ROOT = Path(__file__).resolve().parents[2]
-DATA = ROOT / "models_zh" / "data"
+PROJECT = Path(__file__).resolve().parents[2]      # fasttext/
+ROOT = PROJECT.parent                              # 仓库根目录
+DATA = PROJECT / "models_zh" / "data"
 REAL = ROOT / "data" / "中文虚假招聘_标注7392条.csv"
 WS = re.compile(r"\s+")
 LP = "__label__"
@@ -61,7 +62,7 @@ def main() -> None:
           f" / test {len(zc_te)}（欺诈 {sum(rows[i]['label'] for i in zc_te)}）")
 
     # ---- 联合训练集 ----
-    path = ROOT / "models_zh" / "_2dom_train.txt"
+    path = PROJECT / "models_zh" / "_2dom_train.txt"
     with path.open("w", encoding="utf-8", newline="\n") as f:
         for line in (DATA / "train.txt").read_text(encoding="utf-8").splitlines():
             if not line:
@@ -76,7 +77,7 @@ def main() -> None:
         input=str(path), dim=50, epoch=25, lr=0.5, wordNgrams=2, bucket=200000,
         minCount=2, loss="softmax", ws=5, neg=5, thread=32, verbose=0, seed=20261021)
     path.unlink(missing_ok=True)
-    model.save_model(str(ROOT / "models_zh" / "fasttext_zh_2domain.bin"))
+    model.save_model(str(PROJECT / "models_zh" / "fasttext_zh_2domain.bin"))
 
     def score(xs, prefix=""):
         out = []
@@ -101,7 +102,7 @@ def main() -> None:
     p_zc = score(zc_x, "d_zhaopin ")
 
     # ---- A 基线（单域模型）在 58 上的表现 ----
-    base = fasttext.load_model(str(ROOT / "models_zh" / "fasttext_zh_fraud.bin"))
+    base = fasttext.load_model(str(PROJECT / "models_zh" / "fasttext_zh_fraud.bin"))
     pb = []
     for i in range(0, len(zc_x), 4096):
         labs, prs = base.predict(zc_x[i:i + 4096], k=10)
@@ -119,7 +120,7 @@ def main() -> None:
         "A_single_domain_on_zhaopin": {"pr_auc": ap(zc_y, pb), "rows": len(zc_y)},
         "note": "PR-AUC 阈值无关；58 同城正例仅 %d 条，指标波动大" % sum(zc_y),
     }
-    (ROOT / "models_zh" / "two_domain_report.json").write_text(
+    (PROJECT / "models_zh" / "two_domain_report.json").write_text(
         json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8", newline="\n")
 
     c = report["C_two_domain"]

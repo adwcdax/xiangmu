@@ -23,7 +23,8 @@ import re
 from collections import Counter, defaultdict
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[2]
+PROJECT = Path(__file__).resolve().parents[2]      # fasttext/
+ROOT = PROJECT.parent                              # 仓库根目录
 SRC = ROOT / "data_0" / "中文电诈语料_统一表.csv"
 DST = ROOT / "data" / "zh_data_process"
 OLD_STOPWORDS = ROOT.parent / "_fasttext_zh_archive_20261021" / "old_zh_data_process" / "stopwords.txt"

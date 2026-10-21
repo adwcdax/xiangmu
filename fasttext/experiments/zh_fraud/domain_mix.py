@@ -23,8 +23,9 @@ from pathlib import Path
 import fasttext
 import numpy as np
 
-ROOT = Path(__file__).resolve().parents[2]
-DATA = ROOT / "models_zh" / "data"
+PROJECT = Path(__file__).resolve().parents[2]      # fasttext/
+ROOT = PROJECT.parent                              # 仓库根目录
+DATA = PROJECT / "models_zh" / "data"
 REAL_ZC = ROOT / "data" / "中文虚假招聘_标注7392条.csv"
 WS = re.compile(r"\s+")
 LP = "__label__"
@@ -55,7 +56,7 @@ def p_fraud(model, xs, n_classes):
 
 
 def main() -> None:
-    classes = json.loads((ROOT / "models_zh" / "metrics.json").read_text(encoding="utf-8"))["classes"]
+    classes = json.loads((PROJECT / "models_zh" / "metrics.json").read_text(encoding="utf-8"))["classes"]
     n = len(classes)
     te_x, te_y = load_ft(DATA / "test.txt")
     te_b = (np.array(te_y) != 0).astype(float)
@@ -73,10 +74,10 @@ def main() -> None:
     negs_train, negs_eval = negs[:cut], negs[cut:]
 
     train_lines = (DATA / "train.txt").read_text(encoding="utf-8").splitlines()
-    base = ROOT / "models_zh" / "_mix_base.txt"
+    base = PROJECT / "models_zh" / "_mix_base.txt"
     base.write_text("\n".join(train_lines) + "\n", encoding="utf-8")
 
-    mixed = ROOT / "models_zh" / "_mix_with_real.txt"
+    mixed = PROJECT / "models_zh" / "_mix_with_real.txt"
     with mixed.open("w", encoding="utf-8", newline="\n") as f:
         for line in train_lines:
             f.write(line + "\n")
@@ -123,11 +124,11 @@ def main() -> None:
               f"真实正常帖误报率 @0.5={report[name]['real_neg_fp_rate_at_0.5']:.1%} "
               f"@0.9={report[name]['real_neg_fp_rate_at_0.9']:.1%}")
         if name == "B_with_real_negs":
-            model.save_model(str(ROOT / "models_zh" / "fasttext_zh_fraud_dom.bin"))
+            model.save_model(str(PROJECT / "models_zh" / "fasttext_zh_fraud_dom.bin"))
 
     base.unlink(missing_ok=True)
     mixed.unlink(missing_ok=True)
-    (ROOT / "models_zh" / "domain_mix_report.json").write_text(
+    (PROJECT / "models_zh" / "domain_mix_report.json").write_text(
         json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8", newline="\n")
 
 

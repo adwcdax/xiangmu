@@ -25,9 +25,10 @@ from pathlib import Path
 
 import fasttext
 
-ROOT = Path(__file__).resolve().parents[2] if "experiments" in str(Path(__file__).resolve()) else Path.cwd()
+PROJECT = Path(__file__).resolve().parents[2]      # fasttext/
+ROOT = PROJECT.parent                              # 仓库根目录
 CSV_PATH = ROOT / "data_0" / "中文电诈语料_统一表.csv"
-OUT_DIR = ROOT / "models_zh"
+OUT_DIR = PROJECT / "models_zh"
 WS = re.compile(r"\s+")
 BENIGN = "无风险"
 

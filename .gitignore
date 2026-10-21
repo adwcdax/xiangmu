@@ -8,6 +8,7 @@ venv/
 models/
 models_zh/
 api/model/*.bin
+api_zh/model/*.bin
 
 # 原始大语料（189MB/230MB，不入库）
 data_0/

@@ -34,7 +34,7 @@ npm install
 npm run dev          # http://127.0.0.1:5173
 ```
 
-开发服务器把 `/api`、`/health`、`/labels`、`/predict` 代理到 `http://127.0.0.1:8000`。
+开发服务器与 `npm run preview` 都会把 `/api`、`/health`、`/labels`、`/predict` 代理到 `http://127.0.0.1:8000`。
 API 在别的地址时：
 
 ```bash

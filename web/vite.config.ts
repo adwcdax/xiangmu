@@ -20,4 +20,8 @@ export default defineConfig({
     open: false,
     proxy,
   },
+  preview: {
+    port: 4173,
+    proxy,
+  },
 });

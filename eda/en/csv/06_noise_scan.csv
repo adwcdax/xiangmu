@@ -1,9 +1,0 @@
-﻿规则,命中行数,全量命中率%,出现总次数,真实职位命中率%,虚假职位命中率%,示例（语料原文）
-网址掩码占位符,2806,19.66,4777,19.45,23.73,e Florida office. If you're a #URL_c2a6d9f9e0ae4766af35d42ce444524e4696bd7d4ddecb5dd453f7ffd1278f11## developer we'd like to talk 
-裸网址,52,0.36,52,0.38,0.0,e link below to apply directlyhttps://b4.#URL_c050d78cefc5b9fd74edaf55bf1e65eb99b3be8c37df0cbef9b053604be1ce85#?AppKey=0e11200093d4b79c99574dd8af67
-邮箱地址,1,0.01,1,0.01,0.0,hen send your resume today to info@olympusadvertising.com & For immediate consideration
-残留网页转义符,1,0.01,1,0.0,0.15,"ls.% - Learn the basics of G&M&#8217;s stevedoring operation, inclu"
-非英文字符,6536,45.78,48660,46.66,28.38,onciliation. Generating client’s monthly financial statements
-连续重复符号,365,2.56,533,2.53,3.06,ounds interesting for a career... we should talk.Loggly is look
-残留双空格,0,0.0,0,0.0,0.0,
-单字符文本,0,0.0,0,0.0,0.0,

@@ -16,7 +16,7 @@ class Config:
     # 停用词数据路径
     stopwords_data_path = "./stopwords.txt"
 
-    # 行级溯源索引（sample_id / group / 模态 / 子类）
+    # 样本索引（split / line_no / sample_id / group / label）
     index_data_path = "./index.tsv"
 
 
@@ -26,4 +26,6 @@ if __name__ == '__main__':
     assert Config.dev_data_path == "./dev.txt"
     assert Config.test_data_path == "./test.txt"
     assert Config.label_data_path == "./class.txt"
+    assert Config.stopwords_data_path == "./stopwords.txt"
+    assert Config.index_data_path == "./index.tsv"
     print("配置文件加载成功")
